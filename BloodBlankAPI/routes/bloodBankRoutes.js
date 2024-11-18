@@ -1,8 +1,12 @@
 // routes/bloodBankRoutes.js
 const express = require("express");
 const router = express.Router();
+const bloodBankController = require("../controllers/bloodBankController");
 
-// Placeholder routes
-router.get("/", (req, res) => res.send("Blood Bank API"));
+router.get("/", bloodBankController.getAllEntries);
+router.post("/", bloodBankController.createEntry);
+router.get("/:id", bloodBankController.getEntryById);
+router.put("/:id", bloodBankController.updateEntry);
+router.delete("/:id", bloodBankController.deleteEntry);
 
 module.exports = router;
