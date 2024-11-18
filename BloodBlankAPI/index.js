@@ -1,14 +1,12 @@
+// index.js
 const express = require("express");
 const app = express();
+const bloodBankRoutes = require("./routes/bloodBankRoutes");
 
-// Middleware to parse JSON requests
-app.use(express.json());
+app.use(express.json()); // Middleware to parse JSON
+app.use("/api/bloodbank", bloodBankRoutes); // Use routes
 
-// Placeholder for routes (we'll add this later)
-app.use("/api/bloodbank", require("./routes/bloodBankRoutes"));
-
-// Start the server
-const PORT = process.env.PORT || 3000;
+const PORT = 3000;
 app.listen(PORT, () => {
-	console.log(`Server is running on port ${PORT}`);
+	console.log(`Server running on http://localhost:${PORT}`);
 });

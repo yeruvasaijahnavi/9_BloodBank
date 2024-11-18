@@ -1,9 +1,8 @@
+// routes/bloodBankRoutes.js
 const express = require("express");
 const router = express.Router();
 
-// Placeholder route
-router.get("/", (req, res) => {
-	res.send("Blood Bank API is working!");
-});
+// Placeholder routes
+router.get("/", (req, res) => res.send("Blood Bank API"));
 
 module.exports = router;
