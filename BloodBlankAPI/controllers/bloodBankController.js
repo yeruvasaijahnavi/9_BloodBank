@@ -45,7 +45,6 @@ const getEntryById = (req, res) => {
 	res.status(200).json(entry);
 };
 
-// Function to update an existing entry
 const updateEntry = (req, res) => {
 	const entry = bloodBankEntries.find(
 		(e) => e.id === parseInt(req.params.id)
