@@ -29,9 +29,38 @@ const createBloodBankEntry = (req, res) => {
 	res.status(201).json(newEntry);
 };
 
-// Function to get all entries
+// Function to get all entries with pagination
 const getAllEntries = (req, res) => {
-	res.status(200).json(bloodBankEntries); // Return all blood bank entries
+	const { page = 1, size = 10 } = req.query; // Get page and size from query parameters (with defaults)
+
+	const pageNumber = parseInt(page, 10); // Convert page to integer
+	const pageSize = parseInt(size, 10); // Convert size to integer
+
+	if (pageNumber <= 0 || pageSize <= 0) {
+		return res
+			.status(400)
+			.json({ message: "Page and size must be greater than 0." });
+	}
+
+	// Calculate the starting and ending index
+	const startIndex = (pageNumber - 1) * pageSize;
+	const endIndex = pageNumber * pageSize;
+
+	// Slice the bloodBankEntries array to get the paginated data
+	const paginatedEntries = bloodBankEntries.slice(startIndex, endIndex);
+
+	// Create response metadata
+	const totalEntries = bloodBankEntries.length;
+	const totalPages = Math.ceil(totalEntries / pageSize);
+
+	// Return the paginated result
+	res.status(200).json({
+		totalEntries,
+		totalPages,
+		currentPage: pageNumber,
+		pageSize: pageSize,
+		entries: paginatedEntries,
+	});
 };
 
 // Function to get a specific entry by its ID
