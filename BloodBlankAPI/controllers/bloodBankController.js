@@ -1,14 +1,11 @@
-const bloodBankEntries = [];
-
-// Function to get all entries
-const getAllEntries = (req, res) => {
-	res.status(200).json(bloodBankEntries); // Return all blood bank entries
-};
+// controllers/bloodBankController.js
+let nextId = 1; // Start with ID 1
+const bloodBankEntries = []; // Define an in-memory array for blood bank entries
 
 // Function to create a new entry
-const createEntry = (req, res) => {
+const createBloodBankEntry = (req, res) => {
 	const newEntry = {
-		id: bloodBankEntries.length++, // Increment the ID
+		id: nextId++, // Increment the ID
 		donorName: req.body.donorName,
 		age: req.body.age,
 		bloodType: req.body.bloodType,
@@ -18,8 +15,23 @@ const createEntry = (req, res) => {
 		expirationDate: req.body.expirationDate,
 		status: req.body.status,
 	};
-	bloodBankEntries.push(newEntry); // Add the new entry to the array
-	res.status(201).json(newEntry); // Return the newly created entry
+
+	// Log the new entry to check its contents
+	console.log("New entry being added:", newEntry);
+
+	// Push the new entry into the array
+	bloodBankEntries.push(newEntry);
+
+	// Log the entire bloodBankEntries array after addition
+	console.log("Updated bloodBankEntries array:", bloodBankEntries);
+
+	// Return the newly created entry
+	res.status(201).json(newEntry);
+};
+
+// Function to get all entries
+const getAllEntries = (req, res) => {
+	res.status(200).json(bloodBankEntries); // Return all blood bank entries
 };
 
 // Function to get a specific entry by its ID
@@ -61,7 +73,7 @@ const deleteEntry = (req, res) => {
 
 // Export the functions for use in routes
 module.exports = {
-	createEntry,
+	createBloodBankEntry,
 	getAllEntries,
 	getEntryById,
 	updateEntry,

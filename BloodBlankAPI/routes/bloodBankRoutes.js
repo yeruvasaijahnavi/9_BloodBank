@@ -4,7 +4,7 @@ const router = express.Router();
 const bloodBankController = require("../controllers/bloodBankController");
 
 router.get("/", bloodBankController.getAllEntries);
-router.post("/", bloodBankController.createEntry);
+router.post("/", bloodBankController.createBloodBankEntry);
 router.get("/:id", bloodBankController.getEntryById);
 router.put("/:id", bloodBankController.updateEntry);
 router.delete("/:id", bloodBankController.deleteEntry);
