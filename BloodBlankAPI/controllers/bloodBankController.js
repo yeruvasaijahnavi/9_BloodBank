@@ -17,15 +17,16 @@ const createBloodBankEntry = (req, res) => {
 	};
 
 	// Log the new entry to check its contents
-	console.log("New entry being added:", newEntry);
+	// console.log("New entry being added:", newEntry);
 
 	// Push the new entry into the array
 	bloodBankEntries.push(newEntry);
 
 	// Log the entire bloodBankEntries array after addition
-	console.log("Updated bloodBankEntries array:", bloodBankEntries);
+	// console.log("Updated bloodBankEntries array:", bloodBankEntries);
 
 	// Return the newly created entry
+	// console.log("New entry created");
 	res.status(201).json(newEntry);
 };
 
@@ -98,6 +99,56 @@ const deleteEntry = (req, res) => {
 	bloodBankEntries.splice(index, 1); // Remove entry from array
 	res.status(204).send(); // No content response
 };
+const searchBloodBank = (req, res) => {
+	const { bloodType, status, donorName } = req.query;
+
+	if (!bloodType && !status && !donorName) {
+		return res.status(400).json({
+			message:
+				"At least one search parameter ('bloodType' or 'status') is required.",
+		});
+	}
+
+	if (bloodBankEntries.length === 0) {
+		return res.status(404).json({ message: "Blood bank has no entries" });
+	}
+
+	let results = bloodBankEntries;
+
+	// Filter by blood type if provided
+	if (bloodType) {
+		const decodedBloodType = bloodType
+			.replace("_pos", "+")
+			.replace("_neg", "-");
+
+		results = results.filter(
+			(entry) =>
+				entry.bloodType.toLowerCase() === decodedBloodType.toLowerCase()
+		);
+	}
+
+	// Filter by status if provided
+	if (status) {
+		results = results.filter(
+			(entry) => entry.status.toLowerCase() === status.toLowerCase()
+		);
+	}
+
+	if (donorName) {
+		results = results.filter((entry) =>
+			entry.donorName.toLowerCase().includes(donorName.toLowerCase())
+		);
+	}
+
+	// Check if there are no results after filtering
+	if (results.length === 0) {
+		return res.status(404).json({
+			message: "No entries found for the specified criteria.",
+		});
+	}
+
+	return res.status(200).json(results);
+};
 
 // Export the functions for use in routes
 module.exports = {
@@ -106,4 +157,5 @@ module.exports = {
 	getEntryById,
 	updateEntry,
 	deleteEntry,
+	searchBloodBank,
 };
